@@ -1,0 +1,45 @@
+:root {
+  --primary-color: #000;
+  --dark-color: #e4e4e4;
+  --light-color: #fafafa;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Raleway", sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: #fff;
+  color: #333;
+}
+.container {
+  display: flex;
+  flex: 1;
+}
+.navbar {
+  background: var(--light-color);
+  height: 7vh;
+  border: 1px #000;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.19), 0 2px 6px rgba(0, 0, 0, 0.23);
+}
+.bg-white {
+  background: var(--light-color);
+  color: #000;
+}
+
+.dashboard {
+  margin-top: 0.1vh;
+  width: 20vh;
+  height: 92.9vh;
+  background: var(--light-color);
+}
+.lists {
+  background: var(--dark-color);
+  width: 100vh;
+  flex: 1;
+}
