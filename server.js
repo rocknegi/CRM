@@ -1,4 +1,5 @@
 const express = require("express");
+const { sequelize } = require("./models");
 
 const app = express();
 
@@ -7,9 +8,14 @@ app.use(express.json());
 
 //Define Routes
 app.get("/", (req, res) => {
-  res.send("hello world");
+  console.log("test");
 });
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server is live on PORT ${PORT}`));
+app.listen(PORT, async () => {
+  console.log(`Server is live on PORT http://localhost:${PORT}`);
+  //Create databse tables
+  await sequelize.authenticate();
+  console.log("DB connected");
+});
