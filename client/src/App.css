@@ -16,30 +16,114 @@ body {
   line-height: 1.6;
   background-color: #fff;
   color: #333;
-}
-.container {
-  display: flex;
-  flex: 1;
+  background: var(--dark-color);
 }
 .navbar {
   background: var(--light-color);
   height: 7vh;
-  border: 1px #000;
+  border: 1px #e4e4e4;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.19), 0 2px 6px rgba(0, 0, 0, 0.23);
 }
 .bg-white {
   background: var(--light-color);
   color: #000;
 }
-
+.container {
+  display: flex;
+}
 .dashboard {
   margin-top: 0.1vh;
-  width: 20vh;
+  flex: 0.15;
   height: 92.9vh;
   background: var(--light-color);
+  border: 1px #e4e4e4;
 }
 .lists {
-  background: var(--dark-color);
-  width: 100vh;
+  display: flex;
   flex: 1;
+}
+.dashboardItem {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 20px 20px;
+  padding: 8px 0px;
+  border-radius: 10rem;
+  background: rgb(213, 216, 238);
+}
+
+.listsArea {
+  flex: 0.9;
+  margin: 3%;
+}
+.buttonArea {
+  flex: 0.1;
+}
+
+button {
+  width: 80%;
+  margin: 10px;
+  padding: 10px;
+  border: 0;
+  border-radius: 6px;
+  background: #1836d5;
+  color: #fff;
+  font-weight: bold;
+}
+.dashboardItem:hover,
+.addList:hover,
+button:hover {
+  cursor: pointer;
+}
+.addList {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  border: 2px rgb(194, 190, 190) dashed;
+  padding: 5px;
+  height: fit-content;
+}
+
+.listAreaElements {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.list {
+  display: flex;
+}
+.listItem {
+  margin-right: 10px;
+  padding: 10px;
+  width: 300px;
+  background: var(--light-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 5px #5d70cf solid;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  max-width: fit-content;
+}
+.card {
+  margin-right: 10px;
+  margin-top: 10px;
+  background-color: #fafafa;
+  padding: 10px;
+}
+.cardTitle {
+  display: flex;
+  justify-content: space-between;
+}
+.addCard {
+  width: auto;
+  display: flex;
+  margin: 10px 10px 10px 0px;
+  justify-content: center;
+  border: 2px rgb(194, 190, 190) dashed;
+  padding: 5px;
+  height: fit-content;
 }

@@ -1,4 +1,4 @@
-import React, { StyleSheet } from "react";
+import React from "react";
 
 const Header = () => {
   return <nav className="navbar bg-light"></nav>;

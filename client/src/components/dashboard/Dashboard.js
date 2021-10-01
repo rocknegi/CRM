@@ -5,7 +5,8 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       {ITEMS.map((item) => (
-        <div key={item.id} className="listItem">
+        <div key={item.id} className="dashboardItem">
+          <i className="fas fa-cube" />
           {item.name}
         </div>
       ))}
