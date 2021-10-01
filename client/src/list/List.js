@@ -12,14 +12,10 @@ const List = () => {
       title: "Vitals",
       cards: [
         {
-          title: "1Overview",
-          description:
-            "sjkagdkjb hdsvjdhvsh hdvshjvd shjvdshjv dsh s shjdv shjdv shj s sh shjdv shjdgvshj dashj shj djhs sjk khjs b hjksbjk gkfjasdgfkjas jkas jkfgsdkjfas asjkf kf gsajkf gskjf skj askj gasjkfg askfg skjfg sakjgf ks fkjsgfkjasgfkjsgfjksgfksjagf ksj kjasgks askj askjfg askfg skjfsakugfaskfgaskgfskfg skaj jahsjdhjh ajj  jh kjhkj end",
+          data: '<h1>rohit </h1><p><u>singh negi 1 </u></p><p><u><span class="ql-cursor">﻿</span></u>',
         },
         {
-          title: "1Overview2",
-          description:
-            "sjkagdkjb ajkhsedjkashjdkh  jahsjdhjh ajj  jh kjhkj end",
+          data: '<h1>rohit </h1><p><u>singh negi 2 </u></p><p><u><span class="ql-cursor">﻿</span></u>',
         },
       ],
     },
