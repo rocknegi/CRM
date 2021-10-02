@@ -92,11 +92,12 @@ button:hover {
 
 .list {
   display: flex;
+  /* width: 100%; */
 }
 .listItem {
   margin-right: 10px;
   padding: 10px;
-  /* width: 90%; */
+  min-width: 300px;
   background: var(--light-color);
   display: flex;
   justify-content: space-between;
@@ -131,7 +132,12 @@ button:hover {
 }
 
 .quill {
-  height: 175px;
+  /* height: 175px; */
+}
+.quillList {
+  width: 100%;
+  border: 2px rgb(194, 190, 190) dashed;
+  height: 50px;
 }
 .cardQuill {
   width: 355px;

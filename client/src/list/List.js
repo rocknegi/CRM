@@ -1,53 +1,37 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { getList } from "../utils/listApi";
 import Cards from "./Cards";
-
+import Quill from "./Quill";
 const List = () => {
   const [edit, toggleEditButton] = useState(false);
+  const [listData, updateListData] = useState([]);
   const toggleButton = () => {
     toggleEditButton(!edit);
   };
-  const listData = [
-    {
-      id: 1,
-      title: "Vitals",
-      cards: [
-        {
-          data: '<h1>rohit </h1><p><u>singh negi 1 </u></p><p><u><span class="ql-cursor">﻿</span></u>',
-        },
-        {
-          data: '<h1>rohit </h1><p><u>singh negi 2 </u></p><p><u><span class="ql-cursor">﻿</span></u>',
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "What You Need To Know",
-      cards: [
-        {
-          title: "2Overview",
-          description: "sjkagdkjb ajkhsedjkashjdkh  jahsjdhjh ajj  jh kjhkj",
-        },
-        {
-          title: "2Overview2",
-          description: "sjkagdkjb ajkhsedjkashjdkh  jahsjdhjh ajj  jh kjhkj",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "TEST",
-      cards: [
-        {
-          title: "3Overview",
-          description: "sjkagdkjb ajkhsedjkashjdkh  jahsjdhjh ajj  jh kjhkj",
-        },
-        {
-          title: "3Overview2",
-          description: "sjkagdkjb ajkhsedjkashjdkh  jahsjdhjh ajj  jh kjhkj",
-        },
-      ],
-    },
-  ];
+
+  const getListData = async () => {
+    const data = await getList();
+    updateListData(data);
+  };
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+    ],
+  };
+
+  const addList = async () => {
+    const res = await axios.post("/api/lists", {
+      name: "test",
+    });
+    if (res) getListData();
+  };
+
+  useEffect(() => {
+    getListData();
+  }, []);
 
   return (
     <div className="lists">
@@ -55,19 +39,37 @@ const List = () => {
         <div className="listAreaElements">
           <div className="list">
             {listData.map((item) => (
-              <div key={item.id}>
-                <div className="listItem">
-                  <div>
-                    <i style={{ marginRight: 10 }} class="fas fa-inbox"></i>
-                    {item.title}
-                  </div>
-                  <i class="fas fa-long-arrow-alt-left"></i>
-                </div>
-                <Cards edit={edit} data={item.cards} />
+              // <div key={item.id}>
+              <div key={item.id} className="listItem">
+                <>
+                  <i style={{ marginRight: 10 }} className="fas fa-inbox"></i>
+                  {!edit ? (
+                    <Quill
+                      modules={modules}
+                      theme="bubble"
+                      className="quillList"
+                      data={item}
+                      type="list"
+                      getListData={getListData}
+                    />
+                  ) : (
+                    <div
+                      // className="cardQuill"
+                      dangerouslySetInnerHTML={{ __html: item.name }}
+                    />
+                  )}
+                </>
+                <i className="fas fa-long-arrow-alt-left"></i>
               </div>
+              // {/* <Cards edit={edit} data={item.cards} /> */}
+              // </div>
             ))}
           </div>
-          {!edit && <div className="addList">+ add list</div>}
+          {!edit && (
+            <div onClick={addList} className="addList">
+              + add list
+            </div>
+          )}
         </div>
       </div>
       <div className="buttonArea">
