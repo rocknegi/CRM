@@ -1,18 +1,71 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { getCardsData } from "../utils/cardApi";
 
 import Quill from "./Quill";
 
-const Cards = ({ data, edit }) => {
+const Cards = ({ data, edit, listUuid, id }) => {
+  const [cardData, updateCardData] = useState([]);
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      [
+        "bold",
+        "italic",
+        "underline",
+        //   "strike",
+        //   "blockquote"
+      ],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        //     { indent: "-1" },
+        //     { indent: "+1" },
+      ],
+      [
+        //   "link",
+        "image",
+      ],
+      //   ["clean"],
+    ],
+  };
+
+  const addCard = async () => {
+    const res = await axios.post("/api/cards", {
+      listUuid,
+      description: "abc",
+    });
+    // console.log(res);
+    if (res) getCardData();
+  };
+
+  const getCardData = async () => {
+    const data = await getCardsData(id);
+    console.log(data);
+    updateCardData(data);
+  };
+
+  useEffect(() => {
+    getCardData();
+  }, []);
   return (
     <div className="cards">
-      {data.map((item) => (
-        <div className="card">
+      {cardData.map((item) => (
+        <div key={item.id} className="card">
           {!edit ? (
-            <Quill />
+            <Quill
+              modules={modules}
+              theme="snow"
+              className="quillCard"
+              data={item}
+              type="card"
+              getCardData={getCardData}
+            />
           ) : (
             <div
-              className="cardQuill"
-              dangerouslySetInnerHTML={{ __html: item.data }}
+              className="quillCard"
+              style={{ padding: "15px" }}
+              dangerouslySetInnerHTML={{ __html: item.description }}
             />
           )}
         </div>
@@ -26,7 +79,11 @@ const Cards = ({ data, edit }) => {
         //   )}
         // </div>
       ))}
-      {!edit && <div className="addCard">+ add Card</div>}
+      {!edit && (
+        <div onClick={addCard} className="addCard">
+          + add Card
+        </div>
+      )}
     </div>
   );
 };

@@ -2,9 +2,18 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
+import { updateCard } from "../utils/cardApi";
 import { updateList } from "../utils/listApi";
 
-const Quill = ({ modules, theme, className, data, type, getListData }) => {
+const Quill = ({
+  modules,
+  theme,
+  className,
+  data,
+  type,
+  getListData,
+  getCardData,
+}) => {
   // const modules = {
   //   toolbar: [
   //     [{ header: [1, 2, false] }],
@@ -43,7 +52,9 @@ const Quill = ({ modules, theme, className, data, type, getListData }) => {
     "image",
   ];
 
-  const [value, setValue] = useState(data.name);
+  const [value, setValue] = useState(
+    type === "list" ? data.name : data.description
+  );
   useEffect(() => {
     console.log(value);
   }, [value]);
@@ -52,8 +63,9 @@ const Quill = ({ modules, theme, className, data, type, getListData }) => {
     await updateList(data.id, value);
     getListData();
   };
-  const saveCardData = () => {
-    return;
+  const saveCardData = async () => {
+    await updateCard(data.uuid, value);
+    getCardData();
   };
   return (
     <ReactQuill
@@ -64,7 +76,6 @@ const Quill = ({ modules, theme, className, data, type, getListData }) => {
       formats={formats}
       className={className}
       onBlur={type === "list" ? saveListData : saveCardData}
-      // scrollingContainer={true}
     />
   );
 };

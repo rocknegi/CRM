@@ -30,11 +30,12 @@ body {
 }
 .container {
   display: flex;
+  min-height: 93vh;
+  overflow: hidden;
 }
 .dashboard {
   margin-top: 0.1vh;
   flex: 0.15;
-  height: 92.9vh;
   background: var(--light-color);
   border: 1px #e4e4e4;
 }
@@ -71,6 +72,7 @@ button {
   font-weight: bold;
 }
 i:hover,
+.addCard,
 .dashboardItem:hover,
 .addList:hover,
 button:hover {
@@ -115,7 +117,6 @@ button:hover {
   margin-top: 10px;
   background-color: #fafafa;
   padding: 10px;
-  height: 300px;
 }
 .cardTitle {
   display: flex;
@@ -139,6 +140,7 @@ button:hover {
   border: 2px rgb(194, 190, 190) dashed;
   height: 50px;
 }
-.cardQuill {
+.quillCard {
   width: 355px;
+  /* height: 150px; */
 }

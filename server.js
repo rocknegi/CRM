@@ -1,5 +1,5 @@
 const express = require("express");
-const { sequelize, Lists } = require("./models");
+const { sequelize, Lists, Cards } = require("./models");
 
 const app = express();
 
@@ -55,6 +55,59 @@ app.put("/api/lists/:id", async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// @router  POST api/cards
+// @desc    Create a card
+// @access  Public
+
+app.post("/api/cards", async (req, res) => {
+  const { listUuid, description } = req.body;
+
+  try {
+    const list = await Lists.findOne({ where: { uuid: listUuid } });
+
+    const card = await Cards.create({ description, listId: list.id });
+
+    return res.json(card);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
+// @router  GET api/cards
+// @desc    Get cards
+// @access  Public
+
+app.get("/api/cards/:listId", async (req, res) => {
+  const listId = req.params.listId;
+  try {
+    const cards = await Cards.findAll({ where: { listId } });
+    console.log(cards);
+    return res.json(cards);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
+// @router  PUT api/cards
+// @desc    Update a card
+// @access  Public
+
+app.put("/api/cards/:id", async (req, res) => {
+  const id = req.params.id;
+  const { description } = req.body;
+  try {
+    const card = await Cards.findOne({ where: { uuid: id } });
+    card.description = description;
+    await card.save();
+    return res.json(card);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
   }
 });
 
