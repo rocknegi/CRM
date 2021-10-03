@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import { getCardsData } from "../utils/cardApi";
 
 import Quill from "./Quill";
@@ -49,42 +50,63 @@ const Cards = ({ data, edit, listUuid, id }) => {
     getCardData();
   }, []);
   return (
-    <div className="cards">
-      {cardData.map((item) => (
-        <div key={item.id} className="card">
-          {!edit ? (
-            <Quill
-              modules={modules}
-              theme="snow"
-              className="quillCard"
-              data={item}
-              type="card"
-              getCardData={getCardData}
-            />
-          ) : (
-            <div
-              className="quillCard"
-              style={{ padding: "15px" }}
-              dangerouslySetInnerHTML={{ __html: item.description }}
-            />
-          )}
-        </div>
+    <Droppable droppableId={id}>
+      {(provided, snapshot) => (
+        <div
+          ref={provided.innerRef}
+          // style={{ backgroundColor: snapshot.isDraggingOver ? "blue" : "grey" }}
+          {...provided.droppableProps}
+        >
+          <div className="cards">
+            {cardData.map((item, index) => (
+              <Draggable draggableId={item.id.toString()} index={index}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <div className="card">
+                      {!edit ? (
+                        <Quill
+                          modules={modules}
+                          theme="snow"
+                          className="quillCard"
+                          data={item}
+                          type="card"
+                          getCardData={getCardData}
+                        />
+                      ) : (
+                        <div
+                          className="quillCard"
+                          style={{ padding: "15px" }}
+                          dangerouslySetInnerHTML={{ __html: item.description }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                )}
+              </Draggable>
 
-        // <div className="card">
-        //   <div className="cardTitle">
-        //     <h1>{item.title}</h1>
-        //     <i class="fas fa-ellipsis-h"></i>
-        //   </div>
-        //   <div>{item.description}</div>
-        //   )}
-        // </div>
-      ))}
-      {!edit && (
-        <div onClick={addCard} className="addCard">
-          + add Card
+              // <div className="card">
+              //   <div className="cardTitle">
+              //     <h1>{item.title}</h1>
+              //     <i class="fas fa-ellipsis-h"></i>
+              //   </div>
+              //   <div>{item.description}</div>
+              //   )}
+              // </div>
+            ))}
+            {!edit && (
+              <div onClick={addCard} className="addCard">
+                + add Card
+              </div>
+            )}
+          </div>
+          {provided.placeholder}
         </div>
       )}
-    </div>
+    </Droppable>
   );
 };
 

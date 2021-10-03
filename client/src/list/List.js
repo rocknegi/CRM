@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { DragDropContext } from "react-beautiful-dnd";
+
 import { getList } from "../utils/listApi";
 import Cards from "./Cards";
 import Quill from "./Quill";
@@ -36,46 +38,51 @@ const List = () => {
   return (
     <div className="lists">
       <div className="listsArea">
-        <div className="listAreaElements">
-          <div className="list">
-            {listData.map((item) => (
-              <div key={item.id}>
-                <div key={item.id} className="listItem">
-                  <>
-                    <i style={{ marginRight: 10 }} className="fas fa-inbox"></i>
-                    {!edit ? (
-                      <Quill
-                        modules={modules}
-                        theme="bubble"
-                        className="quillList"
-                        data={item}
-                        type="list"
-                        getListData={getListData}
-                      />
-                    ) : (
-                      <div
-                        // className="cardQuill"
-                        dangerouslySetInnerHTML={{ __html: item.name }}
-                      />
-                    )}
-                  </>
-                  <i className="fas fa-long-arrow-alt-left"></i>
+        <DragDropContext>
+          <div className="listAreaElements">
+            <div className="list">
+              {listData.map((item) => (
+                <div key={item.id}>
+                  <div key={item.id} className="listItem">
+                    <>
+                      <i
+                        style={{ marginRight: 10 }}
+                        className="fas fa-inbox"
+                      ></i>
+                      {!edit ? (
+                        <Quill
+                          modules={modules}
+                          theme="bubble"
+                          className="quillList"
+                          data={item}
+                          type="list"
+                          getListData={getListData}
+                        />
+                      ) : (
+                        <div
+                          // className="cardQuill"
+                          dangerouslySetInnerHTML={{ __html: item.name }}
+                        />
+                      )}
+                    </>
+                    <i className="fas fa-long-arrow-alt-left"></i>
+                  </div>
+                  <Cards
+                    data={[{ data: "<p>helllo</p>", id: 1 }]}
+                    listUuid={item.uuid}
+                    id={item.id}
+                    edit={edit}
+                  />
                 </div>
-                <Cards
-                  data={[{ data: "<p>helllo</p>", id: 1 }]}
-                  listUuid={item.uuid}
-                  id={item.id}
-                  edit={edit}
-                />
-              </div>
-            ))}
-          </div>
-          {!edit && (
-            <div onClick={addList} className="addList">
-              + add list
+              ))}
             </div>
-          )}
-        </div>
+            {!edit && (
+              <div onClick={addList} className="addList">
+                + add list
+              </div>
+            )}
+          </div>
+        </DragDropContext>
       </div>
       <div className="buttonArea">
         {edit ? (
