@@ -1,11 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import { getCardsData } from "../utils/cardApi";
+import { getCardsData, reorderCards } from "../utils/cardApi";
 
 import Quill from "./Quill";
 
-const Cards = ({ data, edit, listUuid, id }) => {
+const Cards = ({
+  data,
+  edit,
+  listUuid,
+  id,
+  // addCard,
+  // getCardData,
+  // cardData,
+  source,
+  destination,
+}) => {
   const [cardData, updateCardData] = useState([]);
   const modules = {
     toolbar: [
@@ -42,15 +52,34 @@ const Cards = ({ data, edit, listUuid, id }) => {
 
   const getCardData = async () => {
     const data = await getCardsData(id);
-    console.log(data);
+    // console.log(data);
     updateCardData(data);
   };
+  const updateOrder = async () => {
+    if (source === null || destination == null) return;
+    try {
+      const res = await reorderCards(
+        cardData[source.index].order,
+        cardData[destination.index].order,
+        id
+      );
+      // console.log(res);
+      getCardData();
+      // updateCardData(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getCardData(id);
+  }, []);
 
   useEffect(() => {
-    getCardData();
-  }, []);
+    updateOrder();
+  }, [source]);
+
   return (
-    <Droppable droppableId={id}>
+    <Droppable droppableId={id.toString()}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
@@ -58,47 +87,46 @@ const Cards = ({ data, edit, listUuid, id }) => {
           {...provided.droppableProps}
         >
           <div className="cards">
-            {cardData.map((item, index) => (
-              <Draggable draggableId={item.id.toString()} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    <div className="card">
-                      {!edit ? (
-                        <Quill
-                          modules={modules}
-                          theme="snow"
-                          className="quillCard"
-                          data={item}
-                          type="card"
-                          getCardData={getCardData}
-                        />
-                      ) : (
-                        <div
-                          className="quillCard"
-                          style={{ padding: "15px" }}
-                          dangerouslySetInnerHTML={{ __html: item.description }}
-                        />
-                      )}
+            {cardData
+              .sort((a, b) => a.order - b.order)
+              .map((item, index) => (
+                <Draggable
+                  key={item.id}
+                  draggableId={item.id.toString()}
+                  index={index}
+                >
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <div className="card">
+                        {!edit ? (
+                          <Quill
+                            modules={modules}
+                            theme="snow"
+                            className="quillCard"
+                            data={item}
+                            type="card"
+                            getCardData={getCardData}
+                          />
+                        ) : (
+                          <div
+                            className="quillCard"
+                            style={{ padding: "15px" }}
+                            dangerouslySetInnerHTML={{
+                              __html: item.description,
+                            }}
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </Draggable>
-
-              // <div className="card">
-              //   <div className="cardTitle">
-              //     <h1>{item.title}</h1>
-              //     <i class="fas fa-ellipsis-h"></i>
-              //   </div>
-              //   <div>{item.description}</div>
-              //   )}
-              // </div>
-            ))}
+                  )}
+                </Draggable>
+              ))}
             {!edit && (
-              <div onClick={addCard} className="addCard">
+              <div onClick={() => addCard(listUuid)} className="addCard">
                 + add Card
               </div>
             )}

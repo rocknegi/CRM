@@ -69,7 +69,8 @@ app.post("/api/cards", async (req, res) => {
     const list = await Lists.findOne({ where: { uuid: listUuid } });
 
     const card = await Cards.create({ description, listId: list.id });
-
+    card.order = card.id;
+    await card.save();
     return res.json(card);
   } catch (error) {
     console.log(error);
@@ -85,7 +86,7 @@ app.get("/api/cards/:listId", async (req, res) => {
   const listId = req.params.listId;
   try {
     const cards = await Cards.findAll({ where: { listId } });
-    console.log(cards);
+    // console.log(cards);
     return res.json(cards);
   } catch (error) {
     console.log(error);
@@ -105,6 +106,37 @@ app.put("/api/cards/:id", async (req, res) => {
     card.description = description;
     await card.save();
     return res.json(card);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
+// @router  PUT api/cards
+// @desc    Update a card
+// @access  Public
+
+app.put("/api/cards/", async (req, res) => {
+  const { source, destination, listId } = req.body;
+  try {
+    // const cards = await Cards.findAll({ where: { listId } });
+    const card1 = await Cards.findOne({ where: { id: source } });
+    const card2 = await Cards.findOne({ where: { id: destination } });
+
+    // let temp = card1.order;
+    // card1.order = card2.order;
+    // card2.order = temp;
+
+    // await card1.save();
+    // await card2.save();
+
+    // const card = await Cards.findAll();
+
+    await Cards.update({ order: card1.order }, { where: { id: destination } });
+
+    await Cards.update({ order: card2.order }, { where: { id: source } });
+
+    return res.json(Cards);
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);

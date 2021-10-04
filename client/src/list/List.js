@@ -1,13 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { getList } from "../utils/listApi";
+import { getCardsData, reorderCards } from "../utils/cardApi";
 import Cards from "./Cards";
 import Quill from "./Quill";
+
 const List = () => {
   const [edit, toggleEditButton] = useState(true);
   const [listData, updateListData] = useState([]);
+  const [reorderData, setReorderData] = useState({
+    source: null,
+    destination: null,
+  });
+  // const [cardData, updateCardData] = useState([]);
+
   const toggleButton = () => {
     toggleEditButton(!edit);
   };
@@ -16,6 +24,12 @@ const List = () => {
     const data = await getList();
     updateListData(data);
   };
+
+  // const getCardData = async (id) => {
+  //   const data = await getCardsData(id);
+  //   console.log(data);
+  //   updateCardData(data);
+  // };
 
   const modules = {
     toolbar: [
@@ -31,6 +45,33 @@ const List = () => {
     if (res) getListData();
   };
 
+  // const addCard = async (listUuid) => {
+  //   const res = await axios.post("/api/cards", {
+  //     listUuid,
+  //     description: "abc",
+  //   });
+  //   // if (res) getCardData(res.data.listId);
+  // };
+
+  const onDragEnd = async (result) => {
+    const { destination, source, draggableId } = result;
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+    console.log(source, destination);
+    setReorderData({
+      source,
+      destination,
+    });
+  };
+
   useEffect(() => {
     getListData();
   }, []);
@@ -38,7 +79,7 @@ const List = () => {
   return (
     <div className="lists">
       <div className="listsArea">
-        <DragDropContext>
+        <DragDropContext onDragEnd={onDragEnd}>
           <div className="listAreaElements">
             <div className="list">
               {listData.map((item) => (
@@ -68,10 +109,14 @@ const List = () => {
                     <i className="fas fa-long-arrow-alt-left"></i>
                   </div>
                   <Cards
-                    data={[{ data: "<p>helllo</p>", id: 1 }]}
+                    // cardData={cardData}
+                    // getCardData={getCardData}
+                    // addCard={addCard}
                     listUuid={item.uuid}
                     id={item.id}
                     edit={edit}
+                    source={reorderData.source}
+                    destination={reorderData.destination}
                   />
                 </div>
               ))}
