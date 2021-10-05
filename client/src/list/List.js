@@ -25,10 +25,14 @@ const List = () => {
   };
 
   const addList = async () => {
-    const res = await axios.post("/api/lists", {
-      name: "test",
-    });
-    if (res) getListData();
+    try {
+      const res = await axios.post("/api/lists", {
+        name: "test",
+      });
+      if (res) getListData();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

@@ -17,30 +17,6 @@ const RenderQuill = ({
   getListData,
   getCardData,
 }) => {
-  // const modules = {
-  //   toolbar: [
-  //     [{ header: [1, 2, false] }],
-  //     [
-  //       "bold",
-  //       "italic",
-  //       "underline",
-  //       //   "strike",
-  //       //   "blockquote"
-  //     ],
-  //     [
-  //       { list: "ordered" },
-  //       { list: "bullet" },
-  //       //     { indent: "-1" },
-  //       //     { indent: "+1" },
-  //     ],
-  //     [
-  //       //   "link",
-  //       "image",
-  //     ],
-  //     //   ["clean"],
-  //   ],
-  // };
-
   const formats = [
     "header",
     "bold",
@@ -59,7 +35,7 @@ const RenderQuill = ({
     type === "list" ? data.name : data.description
   );
   useEffect(() => {
-    console.log(value);
+    // console.log(value);
   }, [value]);
 
   const saveListData = async () => {

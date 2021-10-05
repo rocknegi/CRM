@@ -36,17 +36,21 @@ const Cards = ({ data, edit, listUuid, id }) => {
   };
 
   const addCard = async () => {
-    const res = await axios.post("/api/cards", {
-      listUuid,
-      description: "abc",
-    });
-    // console.log(res);
-    if (res) getCardData();
+    try {
+      const res = await axios.post("/api/cards", {
+        listUuid,
+        description: "abc",
+      });
+      // console.log(res);
+      if (res) getCardData();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getCardData = async () => {
     const data = await getCardsData(id);
-    console.log(data);
+    // console.log(data);
     updateCardData(data);
   };
 
@@ -56,11 +60,7 @@ const Cards = ({ data, edit, listUuid, id }) => {
   return (
     <Droppable droppableId={id.toString()}>
       {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          // style={{ backgroundColor: snapshot.isDraggingOver ? "blue" : "grey" }}
-          {...provided.droppableProps}
-        >
+        <div ref={provided.innerRef} {...provided.droppableProps}>
           <div className="cards">
             {cardData.map((item, index) => (
               <Draggable
@@ -96,15 +96,6 @@ const Cards = ({ data, edit, listUuid, id }) => {
                   </div>
                 )}
               </Draggable>
-
-              // <div className="card">
-              //   <div className="cardTitle">
-              //     <h1>{item.title}</h1>
-              //     <i class="fas fa-ellipsis-h"></i>
-              //   </div>
-              //   <div>{item.description}</div>
-              //   )}
-              // </div>
             ))}
             {!edit && (
               <div onClick={addCard} className="addCard">

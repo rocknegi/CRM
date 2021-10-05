@@ -14,7 +14,7 @@ export const updateCard = async (id, description) => {
     const res = await axios.put(`/api/cards/${id}`, {
       description,
     });
-    console.log(res);
+    // console.log(res);
   } catch (error) {
     console.log(error);
   }
