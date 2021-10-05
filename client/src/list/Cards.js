@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import { getCardsData } from "../utils/cardApi";
 
-import Quill from "./Quill";
+import { getCardsData } from "../utils/cardApi";
+import RenderQuill from "./Quill";
 
 const Cards = ({ data, edit, listUuid, id }) => {
   const [cardData, updateCardData] = useState([]);
@@ -29,6 +29,10 @@ const Cards = ({ data, edit, listUuid, id }) => {
       ],
       //   ["clean"],
     ],
+    imageResize: {
+      // parchment: Quill.import('parchment'),
+      modules: ["Resize", "DisplaySize", "Toolbar"],
+    },
   };
 
   const addCard = async () => {
@@ -50,7 +54,7 @@ const Cards = ({ data, edit, listUuid, id }) => {
     getCardData();
   }, []);
   return (
-    <Droppable droppableId={id}>
+    <Droppable droppableId={id.toString()}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
@@ -59,7 +63,12 @@ const Cards = ({ data, edit, listUuid, id }) => {
         >
           <div className="cards">
             {cardData.map((item, index) => (
-              <Draggable draggableId={item.id.toString()} index={index}>
+              <Draggable
+                isDragDisabled={!edit}
+                draggableId={item.id.toString()}
+                index={index}
+                key={item.id}
+              >
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -68,7 +77,7 @@ const Cards = ({ data, edit, listUuid, id }) => {
                   >
                     <div className="card">
                       {!edit ? (
-                        <Quill
+                        <RenderQuill
                           modules={modules}
                           theme="snow"
                           className="quillCard"

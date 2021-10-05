@@ -4,7 +4,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 
 import { getList } from "../utils/listApi";
 import Cards from "./Cards";
-import Quill from "./Quill";
+import RenderQuill from "./Quill";
 const List = () => {
   const [edit, toggleEditButton] = useState(true);
   const [listData, updateListData] = useState([]);
@@ -50,7 +50,7 @@ const List = () => {
                         className="fas fa-inbox"
                       ></i>
                       {!edit ? (
-                        <Quill
+                        <RenderQuill
                           modules={modules}
                           theme="bubble"
                           className="quillList"
