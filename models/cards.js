@@ -14,10 +14,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   Cards.init(
     {
-      order: {
-        allowNull: true,
-        type: DataTypes.INTEGER,
-      },
       uuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,

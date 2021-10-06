@@ -69,7 +69,6 @@ app.post("/api/cards", async (req, res) => {
     const list = await Lists.findOne({ where: { uuid: listUuid } });
 
     const card = await Cards.create({ description, listId: list.id });
-    card.order = card.id;
     await card.save();
     return res.json(card);
   } catch (error) {
@@ -117,37 +116,8 @@ app.put("/api/cards/:id", async (req, res) => {
 // @access  Public
 
 app.put("/api/cards/", async (req, res) => {
-  const {
-    // source, destination, listId,
-    cardData,
-  } = req.body;
+  const { cardData } = req.body;
   try {
-    // const cards = await Cards.findAll({ where: { listId } });
-
-    // const card1 = await Cards.findOne({ where: { id: source } });
-    // const card2 = await Cards.findOne({ where: { id: destination } });
-
-    // let temp = card1.order;
-    // card1.order = card2.order;
-    // card2.order = temp;
-
-    // await card1.save();
-    // await card2.save();
-
-    // await Cards.update({ order: card1.order }, { where: { id: destination } });
-
-    // await Cards.update({ order: card2.order }, { where: { id: source } });
-
-    // const cards = await Cards.findAll({ where: { listId } });
-
-    // let oldIndex, newIndex;
-    // for (let i = 0; i < cardData.length; i++) {
-    //   if (cardData[i]["id"] === source) oldIndex = i;
-    //   if (cardData[i]["id"] === destination) newIndex = i;
-    // }
-    // const item = cardData.splice(oldIndex, 1);
-    // cardData.splice(newIndex, 0, ...item);
-
     const IDS = [];
     for (let i of cardData) {
       IDS.push(i["id"]);
@@ -158,7 +128,6 @@ app.put("/api/cards/", async (req, res) => {
         await Cards.create({
           description: i["description"],
           listId: i["listId"],
-          order: i["order"],
         });
       }
     }

@@ -5,22 +5,9 @@ import { getCardsData, reorderCards } from "../utils/cardApi";
 
 import Quill from "./Quill";
 
-const Cards = ({
-  data,
-  edit,
-  listUuid,
-  id,
-  // addCard,
-  // getCardData,
-  // cardData,
-  // source,
-  // destination,
-}) => {
+const Cards = ({ edit, listUuid, id }) => {
   const [cardData, updateCardData] = useState([]);
-  const [reorderData, setReorderData] = useState({
-    source: null,
-    destination: null,
-  });
+
   const modules = {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -50,13 +37,11 @@ const Cards = ({
       listUuid,
       description: "abc",
     });
-    // console.log(res);
     if (res) getCardData();
   };
 
   const getCardData = async () => {
     const data = await getCardsData(id);
-    // console.log(data);
     updateCardData(data);
   };
 
@@ -79,13 +64,6 @@ const Cards = ({
     console.log(source, destination);
     if (source === null || destination == null) return;
     try {
-      let temp = cardData[source.index].order;
-
-      // console.log(temp);
-
-      // cardData[source.index].order = cardData[destination.index].order;
-      // cardData[destination.index].order = temp;
-
       let oldIndex, newIndex;
       for (let i = 0; i < cardData.length; i++) {
         if (cardData[i]["id"] === cardData[source.index].id) oldIndex = i;
@@ -96,15 +74,6 @@ const Cards = ({
       console.log(oldIndex, newIndex, cardData);
 
       reorderCards(cardData);
-
-      // const res = await reorderCards(
-      //   cardData[source.index].order,
-      //   cardData[destination.index].order,
-      //   id,
-      //   cardData
-      // );
-      // console.log(res);
-      // getCardData();
     } catch (error) {
       console.log(error);
     }
@@ -120,44 +89,42 @@ const Cards = ({
             {...provided.droppableProps}
           >
             <div className="cards">
-              {cardData
-                // .sort((a, b) => a.order - b.order)
-                .map((item, index) => (
-                  <Draggable
-                    key={item.id}
-                    draggableId={item.id.toString()}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <div className="card">
-                          {!edit ? (
-                            <Quill
-                              modules={modules}
-                              theme="snow"
-                              className="quillCard"
-                              data={item}
-                              type="card"
-                              getCardData={getCardData}
-                            />
-                          ) : (
-                            <div
-                              className="quillCard"
-                              style={{ padding: "15px" }}
-                              dangerouslySetInnerHTML={{
-                                __html: item.description,
-                              }}
-                            />
-                          )}
-                        </div>
+              {cardData.map((item, index) => (
+                <Draggable
+                  key={item.id}
+                  draggableId={item.id.toString()}
+                  index={index}
+                >
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <div className="card">
+                        {!edit ? (
+                          <Quill
+                            modules={modules}
+                            theme="snow"
+                            className="quillCard"
+                            data={item}
+                            type="card"
+                            getCardData={getCardData}
+                          />
+                        ) : (
+                          <div
+                            className="quillCard"
+                            style={{ padding: "15px" }}
+                            dangerouslySetInnerHTML={{
+                              __html: item.description,
+                            }}
+                          />
+                        )}
                       </div>
-                    )}
-                  </Draggable>
-                ))}
+                    </div>
+                  )}
+                </Draggable>
+              ))}
               {!edit && (
                 <div onClick={() => addCard(listUuid)} className="addCard">
                   + add Card

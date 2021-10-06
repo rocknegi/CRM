@@ -14,7 +14,6 @@ const List = () => {
     source: null,
     destination: null,
   });
-  // const [cardData, updateCardData] = useState([]);
 
   const toggleButton = () => {
     toggleEditButton(!edit);
@@ -24,12 +23,6 @@ const List = () => {
     const data = await getList();
     updateListData(data);
   };
-
-  // const getCardData = async (id) => {
-  //   const data = await getCardsData(id);
-  //   console.log(data);
-  //   updateCardData(data);
-  // };
 
   const modules = {
     toolbar: [
@@ -44,14 +37,6 @@ const List = () => {
     });
     if (res) getListData();
   };
-
-  // const addCard = async (listUuid) => {
-  //   const res = await axios.post("/api/cards", {
-  //     listUuid,
-  //     description: "abc",
-  //   });
-  //   // if (res) getCardData(res.data.listId);
-  // };
 
   const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
@@ -105,16 +90,7 @@ const List = () => {
                   </>
                   <i className="fas fa-long-arrow-alt-left"></i>
                 </div>
-                <Cards
-                  // cardData={cardData}
-                  // getCardData={getCardData}
-                  // addCard={addCard}
-                  listUuid={item.uuid}
-                  id={item.id}
-                  edit={edit}
-                  // source={reorderData.source}
-                  // destination={reorderData.destination}
-                />
+                <Cards listUuid={item.uuid} id={item.id} edit={edit} />
               </div>
             ))}
           </div>
