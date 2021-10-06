@@ -14,20 +14,24 @@ export const updateCard = async (id, description) => {
     const res = await axios.put(`/api/cards/${id}`, {
       description,
     });
-    console.log(res);
+    // console.log(res);
   } catch (error) {
     console.log(error);
   }
 };
 
-export const reorderCards = async (source, destination, listId) => {
+export const reorderCards = async (
+  // source, destination, listId,
+  cardData
+) => {
   try {
     const res = await axios.put("/api/cards/", {
-      source,
-      destination,
-      listId,
+      // source,
+      // destination,
+      // listId,
+      cardData,
     });
-    console.log(res.data, source, destination);
+    // console.log(res, source, destination);
     return res.data;
   } catch (error) {
     console.log(error);

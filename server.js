@@ -117,11 +117,15 @@ app.put("/api/cards/:id", async (req, res) => {
 // @access  Public
 
 app.put("/api/cards/", async (req, res) => {
-  const { source, destination, listId } = req.body;
+  const {
+    // source, destination, listId,
+    cardData,
+  } = req.body;
   try {
     // const cards = await Cards.findAll({ where: { listId } });
-    const card1 = await Cards.findOne({ where: { id: source } });
-    const card2 = await Cards.findOne({ where: { id: destination } });
+
+    // const card1 = await Cards.findOne({ where: { id: source } });
+    // const card2 = await Cards.findOne({ where: { id: destination } });
 
     // let temp = card1.order;
     // card1.order = card2.order;
@@ -130,13 +134,36 @@ app.put("/api/cards/", async (req, res) => {
     // await card1.save();
     // await card2.save();
 
-    // const card = await Cards.findAll();
+    // await Cards.update({ order: card1.order }, { where: { id: destination } });
 
-    await Cards.update({ order: card1.order }, { where: { id: destination } });
+    // await Cards.update({ order: card2.order }, { where: { id: source } });
 
-    await Cards.update({ order: card2.order }, { where: { id: source } });
+    // const cards = await Cards.findAll({ where: { listId } });
 
-    return res.json(Cards);
+    // let oldIndex, newIndex;
+    // for (let i = 0; i < cardData.length; i++) {
+    //   if (cardData[i]["id"] === source) oldIndex = i;
+    //   if (cardData[i]["id"] === destination) newIndex = i;
+    // }
+    // const item = cardData.splice(oldIndex, 1);
+    // cardData.splice(newIndex, 0, ...item);
+
+    const IDS = [];
+    for (let i of cardData) {
+      IDS.push(i["id"]);
+    }
+    const destroyed = await Cards.destroy({ where: { id: IDS } });
+    if (destroyed) {
+      for (let i of cardData) {
+        await Cards.create({
+          description: i["description"],
+          listId: i["listId"],
+          order: i["order"],
+        });
+      }
+    }
+
+    return res.json(cardData);
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);
