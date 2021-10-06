@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { getCardsData, reorderCards } from "../utils/cardApi";
 
-import Quill from "./Quill";
+import { getCardsData, reorderCards } from "../utils/cardApi";
+import RenderQuill from "./Quill";
 
 const Cards = ({ edit, listUuid, id }) => {
   const [cardData, updateCardData] = useState([]);
@@ -30,14 +30,22 @@ const Cards = ({ edit, listUuid, id }) => {
       ],
       //   ["clean"],
     ],
+    imageResize: {
+      // parchment: Quill.import('parchment'),
+      modules: ["Resize", "DisplaySize", "Toolbar"],
+    },
   };
 
   const addCard = async () => {
-    const res = await axios.post("/api/cards", {
-      listUuid,
-      description: "abc",
-    });
-    if (res) getCardData();
+    try {
+      const res = await axios.post("/api/cards", {
+        listUuid,
+        description: "abc",
+      });
+      if (res) getCardData();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getCardData = async () => {
@@ -83,14 +91,11 @@ const Cards = ({ edit, listUuid, id }) => {
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId={id.toString()}>
         {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            // style={{ backgroundColor: snapshot.isDraggingOver ? "blue" : "grey" }}
-            {...provided.droppableProps}
-          >
+          <div ref={provided.innerRef} {...provided.droppableProps}>
             <div className="cards">
               {cardData.map((item, index) => (
                 <Draggable
+                  isDragDisabled={!edit}
                   key={item.id}
                   draggableId={item.id.toString()}
                   index={index}
@@ -103,7 +108,7 @@ const Cards = ({ edit, listUuid, id }) => {
                     >
                       <div className="card">
                         {!edit ? (
-                          <Quill
+                          <RenderQuill
                             modules={modules}
                             theme="snow"
                             className="quillCard"

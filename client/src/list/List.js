@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+// import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { getList } from "../utils/listApi";
-import { getCardsData, reorderCards } from "../utils/cardApi";
+// import { getCardsData, reorderCards } from "../utils/cardApi";
 import Cards from "./Cards";
-import Quill from "./Quill";
+import RenderQuill from "./Quill";
 
 const List = () => {
   const [edit, toggleEditButton] = useState(true);
@@ -32,10 +32,14 @@ const List = () => {
   };
 
   const addList = async () => {
-    const res = await axios.post("/api/lists", {
-      name: "test",
-    });
-    if (res) getListData();
+    try {
+      const res = await axios.post("/api/lists", {
+        name: "test",
+      });
+      if (res) getListData();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onDragEnd = async (result) => {
@@ -73,7 +77,7 @@ const List = () => {
                   <>
                     <i style={{ marginRight: 10 }} className="fas fa-inbox"></i>
                     {!edit ? (
-                      <Quill
+                      <RenderQuill
                         modules={modules}
                         theme="bubble"
                         className="quillList"

@@ -13,7 +13,7 @@ module.exports = {
         defaultValue: DataTypes.UUIDV4,
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT("long"),
       },
       listId: {
         type: DataTypes.INTEGER,
